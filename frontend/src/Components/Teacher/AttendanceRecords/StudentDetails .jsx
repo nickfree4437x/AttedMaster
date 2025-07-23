@@ -55,15 +55,20 @@ function StudentDetails() {
         const token = localStorage.getItem('teacherToken');
         const headers = { Authorization: `Bearer ${token}` };
 
-        const response = await axios.get(`https://attendmaster.onrender.com/api/teachers/student/${id}`, { headers });
+        const response = await axios.get(`http://localhost:5000/api/teachers/student/${id}`, { headers });
         
-        setStudentDetails(response.data.student);
-        setAttendanceRecords(response.data.attendanceRecords || []);
+        const fetchedStudent = response.data.student;
+        const allRecords = response.data.attendanceRecords || [];
 
-        // Debug logs
-        console.log("Raw attendance data:", response.data.attendanceRecords);
-        console.log("Present records:", 
-          response.data.attendanceRecords.filter(r => isPresent(r.status)));
+        // Filter records to only show those matching student's course and subjects
+        const filteredRecords = allRecords.filter(record => 
+          record.course === fetchedStudent.course && 
+          (fetchedStudent.subjects && fetchedStudent.subjects.includes(record.subject))
+        );
+
+        setStudentDetails(fetchedStudent);
+        setAttendanceRecords(filteredRecords);
+
       } catch (error) {
         console.error('Error fetching student details:', error);
         Swal.fire('Error', 'Failed to fetch student details', 'error');
@@ -329,8 +334,12 @@ function StudentDetails() {
                         <div className="text-gray-400 mb-4">
                           <FiCalendar className="h-12 w-12 mx-auto" />
                         </div>
-                        <h3 className="text-lg font-medium text-gray-200 dark:text-gray-700">No attendance records found</h3>
-                        <p className="text-gray-300 dark:text-gray-600">This student doesn't have any attendance records yet.</p>
+                        <h3 className="text-lg font-medium text-gray-200 dark:text-gray-700">
+                          No matching attendance records
+                        </h3>
+                        <p className="text-gray-300 dark:text-gray-600">
+                          No attendance found for {name}'s enrolled courses/subjects
+                        </p>
                       </div>
                     ) : (
                       <table className="min-w-full divide-y divide-gray-200 duration-1000">
@@ -465,7 +474,7 @@ function StudentDetails() {
                               );
                             })
                           ) : (
-                            <p className="text-gray-300 dark:text-gray-600 ">No subjects data available</p>
+                            <p className="text-gray-300 dark:text-gray-600">No subjects enrolled</p>
                           )}
                         </div>
                       </div>
