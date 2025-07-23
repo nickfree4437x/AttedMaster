@@ -24,7 +24,7 @@ const TeacherLogin = () => {
     e.preventDefault();
   
     try {
-      const res = await axios.post('http://localhost:5000/api/teacher/login', formData);
+      const res = await axios.post('https://attendmaster.onrender.com/api/teacher/login', formData);
   
       // Store the complete teacher data in localStorage
       localStorage.setItem('teacherToken', res.data.token);
