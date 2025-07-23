@@ -37,13 +37,13 @@ const StudentForm = () => {
     setIsLoading(true);
     try {
       const [coursesRes, subjectsRes, studentsRes] = await Promise.all([
-        axios.get("http://localhost:5000/api/courses/get", {
+        axios.get("https://attendmaster.onrender.com/api/courses/get", {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        axios.get("http://localhost:5000/api/subject/get", {
+        axios.get("https://attendmaster.onrender.com/api/subject/get", {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        axios.get("http://localhost:5000/api/students/get", {
+        axios.get("https://attendmaster.onrender.com/api/students/get", {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
@@ -139,7 +139,7 @@ const StudentForm = () => {
 
         try {
           await axios.put(
-            `http://localhost:5000/api/students/${student._id}`, 
+            `https://attendmaster.onrender.com/api/students/${student._id}`, 
             updatedData, 
             { headers: { Authorization: `Bearer ${token}` } }
           );
@@ -168,7 +168,7 @@ const StudentForm = () => {
       if (result.isConfirmed) {
         try {
           await axios.delete(
-            `http://localhost:5000/api/students/${id}`, 
+            `https://attendmaster.onrender.com/api/students/${id}`, 
             { headers: { Authorization: `Bearer ${token}` } }
           );
           showAlert("Deleted!", "Student has been deleted.", "success");
@@ -195,7 +195,7 @@ const StudentForm = () => {
     setExportLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/students/credentials",
+        "https://attendmaster.onrender.com/api/students/credentials",
         {
           headers: { 
             Authorization: `Bearer ${token}`,
