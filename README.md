@@ -1,4 +1,4 @@
-## 📘 AttendMaster - Student Attendance Management System (MERN Stack)
+## 📘 AttendMaster - Student Attendance Management System
 
 > 🚀 **AttendMaster** is a full-featured, responsive, and scalable **Student Attendance Management System** built using the **MERN Stack** (MongoDB, Express.js, React.js, Node.js). It offers a modern solution for managing student attendance for **Admins**, **Teachers**, and **Students**, with real-time tracking, analytics, and clean UI/UX.
 
@@ -59,7 +59,7 @@
 | **Backend**        | Node.js, Express.js             |
 | **Database**       | MongoDB Atlas / Local           |
 | **Authentication** | JWT (JSON Web Token)            |
-| **Notifications**  | React-Toastify                  |
+| **Notifications**  | React-SweetAlert                |
 | **Deployment**     | Render / Vercel / MongoDB Atlas |
 
 ---
