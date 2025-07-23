@@ -42,7 +42,7 @@ function TeacherAttendanceStats() {
   const fetchRecords = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/teachers/attendance-records', { headers });
+      const res = await axios.get('https://attendmaster.onrender.com/api/teachers/attendance-records', { headers });
       setRecords(res.data);
       setFilteredRecords(res.data);
     } catch (err) {
