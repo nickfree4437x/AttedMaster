@@ -42,9 +42,27 @@ function TeacherAttendanceStats() {
   const fetchRecords = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('https://attendmaster.onrender.com/api/teachers/attendance-records', { headers });
-      setRecords(res.data);
-      setFilteredRecords(res.data);
+      const res = await axios.get('http://localhost:5000/api/teachers/attendance-records', { headers });
+      
+      // Normalize the data with proper status handling
+      const normalizedData = res.data.map(record => {
+        // Convert status to lowercase and trim whitespace
+        const rawStatus = String(record.status).trim().toLowerCase();
+        
+        // Determine if present (accept both 'p' and 'present')
+        const isPresent = rawStatus === 'p' || rawStatus === 'present';
+        
+        return {
+          ...record,
+          status: isPresent ? 'present' : 'absent',
+          subject: record.subject ? String(record.subject).trim() : 'Unknown',
+          course: record.course ? String(record.course).trim() : 'Unknown',
+          date: record.date || new Date().toISOString().split('T')[0]
+        };
+      });
+      
+      setRecords(normalizedData);
+      setFilteredRecords(normalizedData);
     } catch (err) {
       console.error('Error fetching records:', err);
       Swal.fire({
@@ -67,8 +85,12 @@ function TeacherAttendanceStats() {
     // Date filter
     if (startDate && endDate) {
       filtered = filtered.filter(record => {
-        const recordDate = new Date(record.date);
-        return recordDate >= startDate && recordDate <= endDate;
+        try {
+          const recordDate = new Date(record.date);
+          return recordDate >= startDate && recordDate <= endDate;
+        } catch {
+          return false;
+        }
       });
     }
     
@@ -87,7 +109,7 @@ function TeacherAttendanceStats() {
 
   // Statistics calculations
   const totalRecords = filteredRecords.length;
-  const totalPresent = filteredRecords.filter(r => r.status === 'Present').length;
+  const totalPresent = filteredRecords.filter(r => r.status === 'present').length;
   const attendanceRate = totalRecords > 0 ? Math.round((totalPresent / totalRecords) * 100) : 0;
 
   const subjectStats = {};
@@ -104,13 +126,15 @@ function TeacherAttendanceStats() {
   };
 
   filteredRecords.forEach((record) => {
+    const isPresent = record.status === 'present';
+    
     // Subject-wise
     const subject = record.subject;
     if (!subjectStats[subject]) {
       subjectStats[subject] = { present: 0, total: 0 };
     }
     subjectStats[subject].total += 1;
-    if (record.status === 'Present') {
+    if (isPresent) {
       subjectStats[subject].present += 1;
     }
 
@@ -120,26 +144,30 @@ function TeacherAttendanceStats() {
       courseStats[course] = { present: 0, total: 0 };
     }
     courseStats[course].total += 1;
-    if (record.status === 'Present') {
+    if (isPresent) {
       courseStats[course].present += 1;
     }
 
     // Month-wise
-    const date = new Date(record.date);
-    const month = date.toLocaleString('default', { month: 'short', year: 'numeric' });
-    if (!monthStats[month]) {
-      monthStats[month] = { present: 0, total: 0 };
-    }
-    monthStats[month].total += 1;
-    if (record.status === 'Present') {
-      monthStats[month].present += 1;
-    }
+    try {
+      const date = new Date(record.date);
+      const month = date.toLocaleString('default', { month: 'short', year: 'numeric' });
+      if (!monthStats[month]) {
+        monthStats[month] = { present: 0, total: 0 };
+      }
+      monthStats[month].total += 1;
+      if (isPresent) {
+        monthStats[month].present += 1;
+      }
 
-    // Day of week
-    const day = date.toLocaleString('default', { weekday: 'long' });
-    dayOfWeekStats[day].total += 1;
-    if (record.status === 'Present') {
-      dayOfWeekStats[day].present += 1;
+      // Day of week
+      const day = date.toLocaleString('default', { weekday: 'long' });
+      dayOfWeekStats[day].total += 1;
+      if (isPresent) {
+        dayOfWeekStats[day].present += 1;
+      }
+    } catch (e) {
+      console.warn('Invalid date in record:', record.date);
     }
   });
 
@@ -174,16 +202,18 @@ function TeacherAttendanceStats() {
   // Find frequent absentees
   const studentStats = {};
   filteredRecords.forEach(record => {
+    if (!record.studentId) return;
+    
     if (!studentStats[record.studentId]) {
       studentStats[record.studentId] = {
-        name: record.studentName,
-        rollNo: record.rollNo,
+        name: record.studentName || `Student ${record.studentId}`,
+        rollNo: record.rollNo || 'N/A',
         present: 0,
         total: 0
       };
     }
     studentStats[record.studentId].total += 1;
-    if (record.status === 'Present') {
+    if (record.status === 'present') {
       studentStats[record.studentId].present += 1;
     }
   });
@@ -198,6 +228,17 @@ function TeacherAttendanceStats() {
     .sort((a, b) => a.rate - b.rate)
     .slice(0, 5);
 
+  // Get unique filter options
+  const getUniqueOptions = (field) => {
+    const values = records
+      .map(record => record[field])
+      .filter(value => value && value.trim() !== '');
+    return ['All', ...new Set(values)];
+  };
+
+  const uniqueSubjects = getUniqueOptions('subject');
+  const uniqueCourses = getUniqueOptions('course');
+
   // Export functions
   const exportCSV = () => {
     const csv = Papa.unparse(filteredRecords);
@@ -208,12 +249,9 @@ function TeacherAttendanceStats() {
   const exportPDF = () => {
     const doc = new jsPDF();
     
-    // Title
     doc.setFontSize(20);
     doc.text('Attendance Report', 14, 20);
     
-    // Filters info
-    doc.setFontSize(10);
     let filterText = 'All records';
     if (startDate || endDate || selectedSubject !== 'All' || selectedCourse !== 'All') {
       filterText = 'Filters: ';
@@ -223,14 +261,13 @@ function TeacherAttendanceStats() {
       if (selectedSubject !== 'All') filterText += ` | Subject: ${selectedSubject}`;
       if (selectedCourse !== 'All') filterText += ` | Course: ${selectedCourse}`;
     }
+    doc.setFontSize(10);
     doc.text(filterText, 14, 28);
     
-    // Summary stats
     doc.setFontSize(12);
     doc.text(`Total Records: ${totalRecords}`, 14, 40);
     doc.text(`Attendance Rate: ${attendanceRate}%`, 14, 48);
     
-    // Subject table
     doc.text('Subject-wise Attendance:', 14, 60);
     doc.autoTable({
       startY: 65,
@@ -269,10 +306,6 @@ function TeacherAttendanceStats() {
     });
   };
 
-  // Unique values for filters
-  const uniqueSubjects = ['All', ...new Set(records.map(record => record.subject))];
-  const uniqueCourses = ['All', ...new Set(records.map(record => record.course))];
-
   return (
     <div className="min-h-screen bg-gray-900 dark:bg-gray-50 p-4 mt-16 md:p-6 duration-1000">
       <div className="max-w-7xl mx-auto">
@@ -283,30 +316,28 @@ function TeacherAttendanceStats() {
             <p className="text-gray-300 dark:text-gray-600">Comprehensive insights into student attendance patterns</p>
           </div>
           <div className="mt-4 md:mt-0 flex space-x-2">
-          {/* Refresh Button */}
-          <button 
-            onClick={fetchRecords}
-            className="flex items-center px-3 py-2 bg-gray-800 dark:bg-white border border-gray-700 dark:border-gray-200 rounded-lg shadow-md hover:bg-gray-700 dark:hover:bg-gray-500 transition-colors"
-          >
-            <FiRefreshCw className="mr-2 text-gray-300 dark:text-gray-700" />
-            <span className="text-gray-300 dark:text-gray-600">Refresh</span>
-          </button>
-
-          {/* Alerts Toggle Button */}
-          <div className="relative">
             <button 
-              onClick={() => setShowAlerts(!showAlerts)}
-              className={`flex items-center px-3 py-2 rounded-lg shadow-sm transition-colors ${
-                showAlerts 
-                  ? 'bg-red-900/30 dark:bg-red-100 text-red-400 dark:text-red-700 hover:bg-red-900/50 dark:hover:bg-red-200' 
-                  : 'bg-gray-800 dark:bg-gray-100 text-gray-300 dark:text-gray-700 hover:bg-gray-700 dark:hover:bg-gray-200'
-              }`}
+              onClick={fetchRecords}
+              className="flex items-center px-3 py-2 bg-gray-800 dark:bg-white border border-gray-700 dark:border-gray-200 rounded-lg shadow-md hover:bg-gray-700 dark:hover:bg-gray-500 transition-colors"
             >
-              <FiAlertCircle className="mr-2" />
-              <span>Alerts {showAlerts ? 'On' : 'Off'}</span>
+              <FiRefreshCw className="mr-2 text-gray-300 dark:text-gray-700" />
+              <span className="text-gray-300 dark:text-gray-600">Refresh</span>
             </button>
+
+            <div className="relative">
+              <button 
+                onClick={() => setShowAlerts(!showAlerts)}
+                className={`flex items-center px-3 py-2 rounded-lg shadow-sm transition-colors ${
+                  showAlerts 
+                    ? 'bg-red-900/30 dark:bg-red-100 text-red-400 dark:text-red-700 hover:bg-red-900/50 dark:hover:bg-red-200' 
+                    : 'bg-gray-800 dark:bg-gray-100 text-gray-300 dark:text-gray-700 hover:bg-gray-700 dark:hover:bg-gray-200'
+                }`}
+              >
+                <FiAlertCircle className="mr-2" />
+                <span>Alerts {showAlerts ? 'On' : 'Off'}</span>
+              </button>
+            </div>
           </div>
-        </div>
         </div>
 
         {/* Filters */}
