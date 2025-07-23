@@ -84,7 +84,7 @@ const StudentForm = () => {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        "http://localhost:5000/api/students/add", 
+        "https://attendmaster.onrender.com/api/students/add", 
         formData, 
         { headers: { Authorization: `Bearer ${token}` } }
       );
