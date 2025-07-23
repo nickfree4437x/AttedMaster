@@ -40,7 +40,7 @@ const TeacherSupport = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/teachers/support', formData, { headers });
+      await axios.post('https://attendmaster.onrender.com/api/teachers/support', formData, { headers });
       Swal.fire({
         title: 'Success!',
         text: 'Support request sent! We\'ll reply soon.',
