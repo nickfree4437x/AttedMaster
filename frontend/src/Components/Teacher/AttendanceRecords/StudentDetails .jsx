@@ -55,7 +55,7 @@ function StudentDetails() {
         const token = localStorage.getItem('teacherToken');
         const headers = { Authorization: `Bearer ${token}` };
 
-        const response = await axios.get(`http://localhost:5000/api/teachers/student/${id}`, { headers });
+        const response = await axios.get(`https://attendmaster.onrender.com/api/teachers/student/${id}`, { headers });
         
         const fetchedStudent = response.data.student;
         const allRecords = response.data.attendanceRecords || [];
