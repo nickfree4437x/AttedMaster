@@ -35,10 +35,10 @@ const StudentProfile = () => {
 
       try {
         const [profileResponse, attendanceResponse] = await Promise.all([
-          axios.get('http://localhost:5000/api/students/profile', {
+          axios.get('https://attendmaster.onrender.com/api/students/profile', {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          axios.get('http://localhost:5000/api/students/my-attendance', {
+          axios.get('https://attendmaster.onrender.com/api/students/my-attendance', {
             headers: { Authorization: `Bearer ${token}` },
           })
         ]);
@@ -110,7 +110,7 @@ const StudentProfile = () => {
         try {
           const token = localStorage.getItem('studentToken');
           const res = await axios.put(
-            'http://localhost:5000/api/students/update-password',
+            'https://attendmaster.onrender.com/api/students/update-password',
             { oldPassword, newPassword, confirmPassword },
             { headers: { Authorization: `Bearer ${token}` } }
           );
