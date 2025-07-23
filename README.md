@@ -1,7 +1,3 @@
-Are bhai sahi pakde! Agar **AttendMaster** project **MERN Stack** se bana hai, toh chalo README file ko usi ke according **fully professional** bana dete hain.
-
----
-
 ## 📘 AttendMaster - Student Attendance Management System (MERN Stack)
 
 > 🚀 **AttendMaster** is a full-featured, responsive, and scalable **Student Attendance Management System** built using the **MERN Stack** (MongoDB, Express.js, React.js, Node.js). It offers a modern solution for managing student attendance for **Admins**, **Teachers**, and **Students**, with real-time tracking, analytics, and clean UI/UX.
