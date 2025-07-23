@@ -16,7 +16,7 @@ const CourseForm = () => {
     try {
       setIsLoading(true);
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/courses/get", {
+      const res = await axios.get("https://attendmaster.onrender.com/api/courses/get", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCourses(res.data);
