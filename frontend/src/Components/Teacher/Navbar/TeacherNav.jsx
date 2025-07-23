@@ -218,17 +218,16 @@ const TeacherNav = () => {
           </NavLink>
 
           <NavLink
-            to="/teacher/mark-attendance"
-            onClick={closeMobileMenu}
-            className={({ isActive }) =>
-              `flex items-center gap-3 p-2 text-gray-200 dark:text-gray-600 no-underline hover:underline transition hover:text-cyan-600 dark:hover:text-cyan-600 cursor-pointer rounded-lg ${
-                isActive ? "bg-gray-700 dark:bg-gray-200 text-yellow-400 dark:text-blue-600" : "text-gray-300 dark:text-gray-700"
-              }`
-            }
-          >
-            <CalendarCheck className="w-5 h-5" />
-            Check Attendance
-          </NavLink>
+              to="/teacher/attendance-records"
+              className={({ isActive }) =>
+                `flex items-center gap-3 p-2 text-gray-200 dark:text-gray-600 no-underline hover:underline transition hover:text-cyan-600 dark:hover:text-cyan-600 cursor-pointer ${
+                  isActive ? "text-yellow-400 dark:text-blue-600" : "text-gray-300 dark:text-gray-700"
+                }`
+              }
+            >
+              <CalendarCheck className="w-4 h-4" />
+              <span className="text-sm lg:text-base">Attendance</span>
+            </NavLink>
 
           <NavLink
             to="/teacher/reports"
