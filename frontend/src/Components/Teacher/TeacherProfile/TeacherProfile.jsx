@@ -30,7 +30,7 @@ const ChangePassword = () => {
         }
 
         const response = await axios.get(
-          'http://localhost:5000/api/teachers/profile',
+          'https://attendmaster.onrender.com/api/teachers/profile',
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -87,7 +87,7 @@ const ChangePassword = () => {
       }
 
       const response = await axios.post(
-        'http://localhost:5000/api/teachers/change-password',
+        'https://attendmaster.onrender.com/api/teachers/change-password',
         {
           currentPassword: formData.currentPassword,
           newPassword: formData.newPassword
