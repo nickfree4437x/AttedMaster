@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {
  "version": 2,
  "builds": [
@@ -14,7 +13,6 @@
    "dest": "index.js"
   }
  ]
-=======
 {
  "version": 2,
  "builds": [
@@ -30,5 +28,4 @@
    "dest": "index.js"
   }
  ]
->>>>>>> 0b51bd0 (Adding Vercel Json filr)
 }
