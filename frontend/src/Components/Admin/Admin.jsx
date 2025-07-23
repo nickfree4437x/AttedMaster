@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Login from "./Auth/Login";
 import Signup from "./Auth/Signup";
-import Dashboard from "./Dashboard/dashboard";
+import Dashboard from "./Dashboard/Dashboard";
 import DashboardNavbar from "./DashboardNavbar/DashboardNavbar"; // Only using DashboardNavbar
 import Course from "./Course/Course";
 import Subject from "./Subject/Subject";
