@@ -18,7 +18,7 @@ const handleSubscribe = async () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/newsletter/subscribe", {
+      const response = await fetch("https://attendmaster.onrender.com/api/newsletter/subscribe", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
