@@ -27,8 +27,8 @@ const TeacherDashboard = () => {
       setIsLoading(true);
       try {
         const [courseRes, subjectRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/teachers/courses', { headers }),
-          axios.get('http://localhost:5000/api/teachers/subjects', { headers }),
+          axios.get('https://attendmaster.onrender.com/api/teachers/courses', { headers }),
+          axios.get('https://attendmaster.onrender.com/api/teachers/subjects', { headers }),
         ]);
         setCourses(courseRes.data);
         setSubjects(subjectRes.data);
@@ -59,7 +59,7 @@ const TeacherDashboard = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/teachers/students',
+        'https://attendmaster.onrender.com/api/teachers/students',
         {
           course: selectedCourse,
           semester: selectedSemester,
@@ -108,7 +108,7 @@ const TeacherDashboard = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/teachers/mark-attendance',
+        'https://attendmaster.onrender.com/api/teachers/mark-attendance',
         {
           course: selectedCourse,
           subject: selectedSubject,
