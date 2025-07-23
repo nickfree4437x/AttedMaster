@@ -44,7 +44,7 @@ const CourseForm = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "http://localhost:5000/api/courses/add",
+        "https://attendmaster.onrender.com/api/courses/add",
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -147,7 +147,7 @@ const CourseForm = () => {
       if (result.isConfirmed) {
         try {
           const token = localStorage.getItem("token");
-          await axios.delete(`http://localhost:5000/api/courses/${id}`, {
+          await axios.delete(`https://attendmaster.onrender.com/api/courses/${id}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
 
