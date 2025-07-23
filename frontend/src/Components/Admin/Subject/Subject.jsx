@@ -14,7 +14,7 @@ const AddSubjectForm = () => {
 
   const fetchCourses = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/courses/get", {
+      const res = await axios.get("https://attendmaster.onrender.com/api/courses/get", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCourses(res.data);
@@ -27,7 +27,7 @@ const AddSubjectForm = () => {
   const fetchSubjects = async () => {
     setIsLoading(true);
     try {
-      const res = await axios.get("http://localhost:5000/api/subject/get", {
+      const res = await axios.get("https://attendmaster.onrender.com/api/subject/get", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSubjects(res.data);
@@ -65,7 +65,7 @@ const AddSubjectForm = () => {
     try {
       setIsLoading(true);
       await axios.post(
-        "http://localhost:5000/api/subject/add",
+        "https://attendmaster.onrender.com/api/subject/add",
         { course, subjectName: subject },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -146,7 +146,7 @@ const AddSubjectForm = () => {
     try {
       setIsLoading(true);
       await axios.put(
-        `http://localhost:5000/api/subject/update/${sub._id}`,
+        `https://attendmaster.onrender.com/api/subject/update/${sub._id}`,
         result.value,
         { headers: { Authorization: `Bearer ${token}` } }
       );
