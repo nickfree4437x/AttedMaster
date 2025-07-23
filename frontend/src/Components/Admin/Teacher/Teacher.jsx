@@ -26,10 +26,10 @@ const TeacherForm = () => {
       const token = localStorage.getItem("token");
 
       const [courseRes, subjectRes] = await Promise.all([
-        axios.get("http://localhost:5000/api/courses/get", {
+        axios.get("https://attendmaster.onrender.com/api/courses/get", {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        axios.get("http://localhost:5000/api/subject/get", {
+        axios.get("https://attendmaster.onrender.com/api/subject/get", {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
@@ -46,7 +46,7 @@ const TeacherForm = () => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/teacher/get", {
+      const res = await axios.get("https://attendmaster.onrender.com/api/teacher/get", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTeacherList(res.data);
@@ -124,7 +124,7 @@ Generated on: ${new Date().toLocaleString()}
     setIsLoading(true);
     const token = localStorage.getItem("token");
     const response = await axios.post(
-      "http://localhost:5000/api/teacher/add", 
+      "https://attendmaster.onrender.com/api/teacher/add", 
       formData, 
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -190,7 +190,7 @@ Generated on: ${new Date().toLocaleString()}
         try {
           const token = localStorage.getItem("token");
           await axios.delete(
-            `http://localhost:5000/api/teacher/delete/${teacherId}`,
+            `https://attendmaster.onrender.com/api/teacher/delete/${teacherId}`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
           showAlert("Deleted!", "Teacher has been deleted.", "success");
@@ -281,7 +281,7 @@ Generated on: ${new Date().toLocaleString()}
 
       try {
         await axios.put(
-          `http://localhost:5000/api/teacher/update/${teacher._id}`, 
+          `https://attendmaster.onrender.com/api/teacher/update/${teacher._id}`, 
           updatedData, 
           { headers: { Authorization: `Bearer ${token}` } }
         );
