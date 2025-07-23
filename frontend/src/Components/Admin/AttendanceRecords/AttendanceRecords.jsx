@@ -42,7 +42,7 @@ const AttendanceRecords = () => {
         return;
       }
 
-      const response = await axios.get('http://localhost:5000/api/attendance', {
+      const response = await axios.get('https://attendmaster.onrender.com/api/attendance', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
