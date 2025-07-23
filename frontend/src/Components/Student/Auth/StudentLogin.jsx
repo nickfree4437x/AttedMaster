@@ -17,7 +17,7 @@ const StudentLogin = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:5000/api/student-login", formData);
+      const response = await axios.post("https://attendmaster.onrender.com/api/student-login", formData);
 
       if (response.data.success) {
         Swal.fire({
