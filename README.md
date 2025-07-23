@@ -13,7 +13,6 @@
 * [🗂 Folder Structure](#-folder-structure)
 * [🛡️ Environment Variables](#️-environment-variables)
 * [💡 Future Enhancements](#-future-enhancements)
-* [📑 License](#-license)
 
 ---
 
