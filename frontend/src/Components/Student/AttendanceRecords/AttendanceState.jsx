@@ -30,7 +30,7 @@ function AttendanceState() {
     const fetchAttendance = async () => {
       try {
         const token = localStorage.getItem('studentToken');
-        const res = await axios.get('http://localhost:5000/api/students/my-attendance', {
+        const res = await axios.get('https://attendmaster.onrender.com/api/students/my-attendance', {
           headers: { Authorization: `Bearer ${token}` },
         });
 
