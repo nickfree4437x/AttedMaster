@@ -43,9 +43,9 @@ const AdminDashboard = () => {
         const headers = { Authorization: `Bearer ${token}` };
 
         const [studentsRes, teachersRes, attendanceRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/students/get', { headers }),
-          axios.get('http://localhost:5000/api/teacher/get', { headers }),
-          axios.get('http://localhost:5000/api/attendance', { headers }),
+          axios.get('https://attendmaster.onrender.com/api/students/get', { headers }),
+          axios.get('https://attendmaster.onrender.com/api/teacher/get', { headers }),
+          axios.get('https://attendmaster.onrender.com/api/attendance', { headers }),
         ]);
 
         const students = studentsRes.data;
