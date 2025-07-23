@@ -31,7 +31,7 @@ function SupportFAQPage() {
 
     try {
       const token = localStorage.getItem('studentToken');
-      await axios.post('http://localhost:5000/api/students/support', formData, {
+      await axios.post('https://attendmaster.onrender.com/api/students/support', formData, {
         headers: { 
           Authorization: `Bearer ${token}`,
         },
